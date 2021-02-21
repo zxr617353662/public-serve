@@ -1,0 +1,85 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="header">
+    <nav class="navbar navbar-inverse navbar-fixed-top bootstrap-admin-navbar
+    bootstrap-admin-navbar-under-small"
+         role="navigation">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="collapse navbar-collapse main-navbar-collapse">
+                        <a class="navbar-brand" href="#">
+                            <strong>欢迎使用在线考试系统</strong>
+                            <span style="font-size: 8px" id="cur_time"></span>
+                        </a>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a type="button" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    欢迎您，<span th:text="${session.student.name}"></span>
+
+                                    <!--
+                                        ==   >>   eq
+                                    -->
+                                    <span th:if="${session.student.modified eq 0}" style="color: red;">当前初是始密码，请尽快修改</span>
+
+                                    <i class="caret"></i>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li>
+                                        <a data-toggle="modal" data-target="#password" href="#">修改密码</a>
+                                    </li>
+                                    <li role="presentation" class="divider"></li>
+                                    <li><a
+                                            th:href="@{/logout}"
+                                            href="../../logout">退出</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <form th:action="@{/admin/password/modify}" action="../../admin/password/modify" method="post" role="form"
+          id="password-form">
+        <div class="modal fade" id="password" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">修改密码<span
+                                style="font-size: 14px;color: grey;"> (*4-10位字母数字下划线组成) </span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="txt_oldPassword">请输入旧密码</label>
+                            <span class="password-error" style="color: red"></span>
+                            <input type="password" name="oldPassword" class="form-control" id="txt_oldPassword"
+                                   placeholder="请输入旧密码">
+                        </div>
+                        <div class="form-group">
+                            <label for="txt_newPassword">请输入新密码</label>
+                            <span class="password-error" style="color: red"></span>
+                            <input type="password" name="newPassword" class="form-control" id="txt_newPassword"
+                                   placeholder="请输入新密码">
+                        </div>
+                        <div class="form-group">
+                            <label for="txt_newPasswordConfirm">请重复新密码</label>
+                            <span class="password-error" style="color: red"></span>
+                            <input type="password" name="newPasswordConfirm" class="form-control"
+                                   id="txt_newPasswordConfirm"
+                                   placeholder="请重复新密码">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit">修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

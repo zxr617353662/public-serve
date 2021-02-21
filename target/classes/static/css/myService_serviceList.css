@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#center{
+    width: 1000px;
+    /*height: 1000px;*/
+    margin: 0 auto;
+    /*background-color: palegreen;*/
+}
+#center_header{
+    width: 1000px;
+    height: 80px;
+    border-top:1px solid #ccc ;
+    border-bottom:1px solid #ccc ;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    /*background-color: pink;*/
+}
+.prompt{
+    margin-top: 10px ;
+    margin-left: 10px ;
+    font-size: 15px;
+    margin-bottom: 20px;
+    color: #999;
+}
+.title{
+    display: inline;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px ;
+    margin-left: 10px ;
+    margin-right: 10px;
+    color: black;
+    cursor: pointer;
+}
+.service_list{
+    width: 600px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+#center_button{
+    width: 970px;
+    margin: 0 auto;
+    /*background-color: yellow;*/
+    height: 100px;
+}
+#center_button a{
+    text-decoration: none;
+    margin-right: 15px;
+}
+#center_button a:hover{
+    color: #37A8F8 ;
+}
+#center_item_detail{
+    width: 1000px;
+    height: 490px;
+    /*background-color: #dca7a7;*/
+}
+#center_item_detail ul li{
+    list-style: none;
+    width: 225px;
+    margin: 0px 0px 20px 20px;
+    height: 186px;
+    /*border-radius: 3%;*/
+    /*background-color: #16a085;*/
+    float: left;
+    border: 1px #CCCCCC solid;
+    box-sizing: border-box;
+    /*padding: 15px;*/
+}
+#center_item_detail ul li p{
+    width: 195px;
+    height: 110px;
+    color: #333;
+    /*background-color: yellow;*/
+    margin: 5px 15px 10px 15px;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 10px;*/
+    /*max-height: 120px;*/
+    word-wrap:break-word;
+    /*text-overflow: -o-ellipsis-lastline;*/
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+}
+#center_item_detail ul li div{
+    /*text-decoration: none;*/
+    width: 100%;
+    height: 30px;
+    border-top: 1px #ccc solid;
+    /*background-color: #00ee00;*/
+    margin: 0 auto;
+    padding: 0 15px 0 15px;
+    background-color: #dddddd;
+}
+#center_item_detail ul li div a{
+    line-height: 30px;
+    color: #37A8F8;
+    text-decoration: none;
+}
+#center_item_detail ul li div a:hover{
+    color:#2445F8;
+}

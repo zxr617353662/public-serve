@@ -1,0 +1,47 @@
+server:
+  port: 8081
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /var/log/ts-admin
+
+spring:
+  datasource:
+    #    url: jdbc:mysql://rm-m5e6h43h88wo0b55x8o.mysql.rds.aliyuncs.com:3306/ts_db?serverTimezone=GMT%2B8&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://localhost:3306/publicserve?serverTimezone=GMT%2B8&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: password
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+      test-on-borrow: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+  resources:
+    static-locations: file:E:\file
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 20000
+
+  application:
+    name: spring-boot-redis
+
+mybatis:
+  type-aliases-package: model
+  mapper-locations:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: com.munger.ts.dal.handler
+
+# 配置分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公告管理</title>
+    <link rel="SHORTCUT ICON" href="../../static/images/resizeApi.png">
+    <link rel="BOOKMARK" href="../../static/images/resizeApi.png">
+    <link rel="stylesheet" type="text/css"
+          href="../../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/head.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/list_main.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/modal.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-admin-theme.css">
+
+    <script type="text/javascript" src="../../static/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../static/script/admin/student.js" charset="utf-8"></script>
+    <script th:src="@{/static/script/base.js}" src="../../static/script/base.js" charset="UTF-8"></script>
+    <script src="../../static/script/time.js" charset="UTF-8"></script>
+    <script src="../../static/script/tips.js" charset="UTF-8"></script>
+    <style>
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=88);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 65%;
+            height: 75%;
+            padding: 20px;
+            border: 10px solid orange;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="header">
+    <nav class="navbar navbar-inverse navbar-fixed-top bootstrap-admin-navbar
+    bootstrap-admin-navbar-under-small"
+         role="navigation">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="collapse navbar-collapse main-navbar-collapse">
+                        <a class="navbar-brand" href="#">
+                            <strong>欢迎使用南京公共服务管理平台</strong>
+                            <span style="font-size: 8px" id="cur_time"></span>
+                        </a>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <!--                                    <a type="button" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">-->
+                                <i class="glyphicon glyphicon-user"></i>
+                            <li>欢迎您，<span id="showCookiea"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2 bootstrap-admin-col-left"
+             xmlns:th="http://www.thymeleaf.org" th:fragment="left">
+            <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+                <li th:class="${function eq 1?'active' :''}" class="active" >
+                    <a th:href="@{/admin/index}" href="../../admin/index?function=1">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 主页
+                    </a>
+                </li>
+                <li th:class="${function eq 2?'active' :''}" class="active">
+                    <a th:href="@{/service-total} " href="../../service-total?function=2">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 服务大全
+                    </a>
+                </li >
+                <li th:class="${function eq 3?'active' :''}">
+                    <a th:href="@{/service-management}" href="../../service-management?function=3">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 服务管理
+                    </a>
+                </li>
+                <li th:class="${function eq 4?'active' :''}">
+                    <a th:href="@{/notice}" href="../../notice">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 公告管理
+                    </a>
+                </li>
+                <li th:class="${function eq 5?'active' :''}">
+                    <a th:href="@{/user}" href="../../admin/user">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 用户管理
+                    </a>
+                </li>
+                <li th:class="${function eq 6?'active' :''}">
+                    <a th:href="@{/message_list}" href="../../message_list">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 文件管理
+                    </a>
+                </li>
+                <li>
+                    <a href="../../">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 关于我们
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-10">
+            <div class="row">
+
+                <button style="float: right;margin-bottom: 10px" class="btn btn-xs" onclick="openDialog()">添加</button>
+                <div class="panel panel-default bootstrap-admin-no-table-panel" >
+                    <div class="panel-heading" >
+                        请输入标题:<input type="text" id="title_find" style="width: 150px" placeholder="请输入查询的标题">
+                        <button class="text-muted bootstrap-admin-box-title" style="font-size: 15px;width: 60px;margin-left: 20px;margin-bottom: 20px" onclick="findListByTitle()">查询</button>
+                        <div class="text-muted bootstrap-admin-box-title">
+                            <table class="table table-hover table-bordered" th:fragment="statList" id="article_list" th:switch="${listNotice ne null and listNotice.size() gt 0}">
+                                <thead >
+                                <tr >
+                                    <th style="text-align: center" width="5%">id</th>
+                                    <th style="text-align: center" width="20%">公告标题</th>
+                                    <th style="text-align: center" width="20%">创建时间</th>
+                                    <th style="text-align: center" width="15%">作者</th>
+                                    <th style="text-align: center" width="20%">公告状态</th>
+                                    <th style="text-align: center" width="20%">操作</th>
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tbody th:case="true">
+                                <tr th:each="item : ${listNotice}">
+                                    <th style="text-align: center" th:text="${item.id}"><a href="#">11</a></th>
+                                    <th style="text-align: center" th:text="${item.noticeTitle}"><a href="#">11</a></th>
+                                    <th style="text-align: center" th:text="${item.createTime}">22</th>
+                                    <th style="text-align: center" th:text="${item.author}">22</th>
+                                    <th th:if="${item.state} eq 'CLOSE'"  style="text-align: center" >未发布</th>
+                                    <th th:if="${item.state} eq 'OPEN'"  style="text-align: center" >已发布</th>
+                                    <th style="text-align: center">
+                                        <button th:if="${item.state} eq 'CLOSE'" class="btn btn-primary btn-xs" onclick="openDialog1(this);">编辑</button>
+                                        <button th:if="${item.state} eq 'CLOSE'" class="btn btn-info btn-xs" onclick="openGrade(this);">发布</button>
+                                        <button th:if="${item.state} eq 'OPEN'" class="btn btn-info btn-xs" onclick="openGrade2(this);">查看</button>
+                                        <button th:if="${item.state} eq 'CLOSE'" class="btn btn-danger btn-xs" onclick="deleteGrade(this);">删除</button>
+                                    </th>
+                                </tr>
+                                </tbody>
+                                <tbody th:case="false">
+                                <tr>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                    <th>
+                                        <button class="btn btn-danger btn-xs" onclick="deleteGrade(this);">删除</button>
+                                    </th>
+                                </tr>
+                                </tbody>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--添加模态框-->
+<div id="light" style="" class="white_content">
+
+    <div class="panel-heading">
+        请输入公告标题: <span><input id="noticeTitle" class="form-control" type="text" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="display: flex">
+        请输入公告内容:
+        <textarea style="width: 800px;height: 400px" id="noticeContent"></textarea>
+    </div>
+    <div class="panel-heading" >
+        请输入发布人姓名: <span><input id="author" class="form-control" type="text" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="display: flex;justify-content: center;align-content: center">
+        <button class="form-item" onclick="add_notice()" type="submit" style="font-size: 20px">添加</button>
+    </div>
+    <a href = "javascript:void(0)" onclick = "closeDialog()">点这里关闭本窗口</a>
+</div>
+<div id="fade" class="black_overlay"></div>
+
+
+<!--编辑模态框-->
+<div id="light1" style="" class="white_content">
+    <input type="hidden" id="upinp">
+    <div class="panel-heading">
+        请输入公告标题: <span><input id="noticeTitle1" class="form-control" type="text" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="display: flex">
+        请输入公告内容:
+        <textarea style="width: 800px;height: 400px" id="noticeContent1"></textarea>
+    </div>
+    <div class="panel-heading" >
+        请输入发布人姓名: <span><input id="author1" class="form-control" type="text" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="display: flex;justify-content: center;align-content: center">
+        <button class="form-item" onclick="update_notice()" type="submit" style="font-size: 20px">保存</button>
+    </div>
+    <a href = "javascript:void(0)" onclick = "closeDialog1()">点这里关闭本窗口</a>
+</div>
+<div id="fade1" class="black_overlay"></div>
+
+<div id="light2" style="" class="white_content">
+    <input type="hidden" id="upinp1">
+    <div class="panel-heading">
+        请输入公告标题: <span><input id="noticeTitle2" class="form-control" type="text" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="display: flex">
+        请输入公告内容:
+        <textarea style="width: 800px;height: 400px" id="noticeContent2"></textarea>
+    </div>
+    <div class="panel-heading" >
+        请输入发布人姓名: <span><input id="author2" class="form-control" type="text" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <a href = "javascript:void(0)" onclick = "closeDialog2()">点这里关闭本窗口</a>
+</div>
+<div id="fade2" class="black_overlay"></div>
+</body>
+<script type="text/javascript">
+    $.get("/service-list","",function (res) {
+    })
+    var nn = document.cookie.split(";")
+    var ele = window.document.getElementById("showCookiea")
+    ele.innerHTML = nn[0].split("=")[1]
+
+    function add_notice(){
+        var noticeTitle = document.getElementById("noticeTitle").value
+        var noticeContent = document.getElementById("noticeContent").value
+        var author = document.getElementById("author").value
+        var addNoticeData ={} ;
+        addNoticeData.noticeTitle = noticeTitle;
+        addNoticeData.noticeContent = noticeContent;
+        addNoticeData.author = author;
+        $.ajax({
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            url: "/add_notice",
+            data: JSON.stringify(addNoticeData),
+            dataType: 'json',
+            success: function(res) {
+                if (res === "添加成功"){
+                    Tips.showError("添加成功")
+                    setTimeout(function () {
+                        document.getElementById('light').style.display='none';
+                        document.getElementById('fade').style.display='none'
+                    },2000)
+                    document.getElementById("noticeTitle").value =' '
+                    document.getElementById("noticeContent").value =' '
+                    document.getElementById("author").value =' '
+                }
+            }
+        })
+    }
+    function findListByTitle() {
+        var find_title = document.getElementById("title_find");
+        if (find_title){
+            var title_like= find_title.value
+            var url = "title="+title_like
+            window.location.href ="../../notice?"+encodeURI(encodeURI(url))+""
+        }
+    }
+    function deleteGrade(btn) {
+        var id = $(btn).parent().prev().prev().prev().prev().prev().html();
+        $.post("/del_notice?id="+id,"",function (res) {
+            if (res === "删除成功"){
+                Tips.showError("删除成功")
+                setTimeout(function () {
+                    window.location.href = "../../notice"
+                },2000)
+            }
+        })
+    }
+    //添加模态框弹出
+    function openDialog(){
+        document.getElementById('light').style.display='block';
+        document.getElementById('fade').style.display='block'
+    }
+    //关闭
+    function closeDialog(){
+
+        document.getElementById('light').style.display='none';
+        document.getElementById('fade').style.display='none'
+    }
+
+    //编辑模态框
+    function openDialog1(btn){
+        var id = $(btn).parent().prev().prev().prev().prev().prev().html();
+        document.getElementById("upinp").value = id
+        $.get("/get_notice?id="+id,"",function (res) {
+            document.getElementById("noticeTitle1").value = res.noticeTitle
+            document.getElementById("noticeContent1").innerHTML = res.noticeContent
+            document.getElementById("author1").value = res.author
+        })
+        document.getElementById('light1').style.display='block';
+        document.getElementById('fade1').style.display='block'
+    }
+    function openGrade2(btn){
+        var id = $(btn).parent().prev().prev().prev().prev().prev().html();
+        document.getElementById("upinp1").value = id
+        $.get("/get_notice?id="+id,"",function (res) {
+            document.getElementById("noticeTitle2").value = res.noticeTitle
+            document.getElementById("noticeContent2").innerHTML = res.noticeContent
+            document.getElementById("author2").value = res.author
+        })
+        document.getElementById('light2').style.display='block';
+        document.getElementById('fade2').style.display='block'
+    }
+    //关闭
+    function closeDialog1(){
+        document.getElementById('light1').style.display='none';
+        document.getElementById('fade1').style.display='none'
+    }
+    function closeDialog2(){
+        document.getElementById('light2').style.display='none';
+        document.getElementById('fade2').style.display='none'
+    }
+
+
+
+    //发布
+    function openGrade(btn) {
+        var id = $(btn).parent().prev().prev().prev().prev().prev().html();
+        console.log(id)
+        var state = $(btn).parent().prev().html();
+        console.log(state)
+        if (state === '未发布'){
+            $.post("/notice_open?id="+id+"&state=OPEN","",function (res) {
+                if (res === "启用成功") {
+                    Tips.showError("发布成功")
+                        setTimeout(function () {
+                            window.location.href = "../../notice"
+                        }, 2000)
+                    }
+            })
+        }else if (state === '已发布') {
+            $.post("/notice_open?id=" + id + "&state=CLOSE", "", function (res) {
+                if (res === "关闭成功") {
+                    Tips.showError("下架成功")
+                    if (id) {
+                        setTimeout(function () {
+                            window.location.href = "../../notice"
+                        }, 2000)
+                    }
+                }
+            })
+        }
+    }
+    function update_notice() {
+        var show_id = document.getElementById("upinp").value
+        var noticeTitle1 = document.getElementById("noticeTitle1").value
+        var noticeContent1 = document.getElementById("noticeContent1").value
+        var author1 = document.getElementById("author1").value
+        var addNoticeData ={} ;
+        addNoticeData.id = show_id;
+        addNoticeData.noticeTitle = noticeTitle1;
+        addNoticeData.noticeContent = noticeContent1;
+        addNoticeData.author = author1;
+        $.ajax({
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            url: "/update_notice",
+            data: JSON.stringify(addNoticeData),
+            dataType: 'json',
+            success: function (res) {
+                if (res === "更新成功") {
+                    Tips.showError("更新成功")
+                    setTimeout(function () {
+                        document.getElementById('light1').style.display='none';
+                        document.getElementById('fade1').style.display='none'
+                        window.location.href = "../../notice"
+                    }, 2000)
+                }
+            }
+        })
+
+    }
+</script>
+
+</html>

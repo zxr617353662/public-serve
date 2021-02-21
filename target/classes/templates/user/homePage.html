@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>首页</title>
+    <link rel="stylesheet" href="../../static/css/headerLogin.css">
+    <link rel="stylesheet" href="../../static/css/homePage.css">
+    <link rel="stylesheet" href="../../static/css/footer.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css">
+    <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+    <script src="../../static/script/jquery-1.11.1.min.js"></script>
+    <script src="../../static/script/echarts/dist/echarts.min.js"></script>
+    <script src="../../static/script/active.js"></script>
+<!--    <script src="script/homePage_service_distribution_echars.js"></script>-->
+    <style>
+        .black_overlay{
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index:1001;
+            -moz-opacity: 0.8;
+            opacity:.80;
+            filter: alpha(opacity=88);
+        }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 12%;
+            left: 20%;
+            width: 55%;
+            height: 83%;
+            padding: 20px;
+            border: 10px solid orange;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="header">
+    <div class="headerb">
+        <div class="logo">
+            <img src="../../static/images/logo.jpg"/>
+        </div>
+    </div>
+    <div class="head_chose" >
+        <ul class="nav nav-pills">
+            <li th:class="${function eq 1?'active' :''}" class="active" ><a th:href="@{/user/index}">首页</a></li>
+            <li th:class="${function eq 2?'active' :''}" class="active" ><a th:href="@{/user/serviceTotal}">服务大全</a></li>
+        </ul>
+    </div>
+    <div style="height: 20px;width: 100%;background-color: white;margin-top: 10px">
+        <a th:href="@{/notice_listPage}" target="_blank"><span style="margin-left: 450px"><img src="../../static/images/notice.jpg" alt=""></span><span th:text="${listNotice.getNoticeTitle()}"></span></a>
+    </div>
+</div>
+
+<div id="center">
+    <div id="center_top">
+        <div class="center_top_left">
+            <div class="header_pic">
+                <img src="../../static/images/pic10.jpg" alt="">
+            </div>
+            <div class="header_pic_aside_word">
+                <p>您好，<span id="showCookie" ></span>,祝您开心每一天！ </p>
+                <span class="word1" id="timeShow"></span>
+            </div>
+        </div>
+    </div>
+    <div id="center_center">
+        <div class="service_list">
+            <div class="service_list_header">
+                <span class="item">服务目录</span>
+                <a class="all_item more" th:href="@{/user/serviceTotal}">全部项目</a>
+            </div>
+            <div class="service_list_item">
+                <ul class="detail_item" >
+                    <li th:each="item : ${artList}">
+                        <h4 class="detail_item_name" id="sas" th:text="${item.name}">基本医疗服务</h4>
+                        <a class="more" th:href="@{/user/serviceTotal}" th:if="${item.getSize() > 5}">更多</a>
+                        <ul type="disc" >
+                            <li th:each="art_item :${item.getArticleList()}">
+<!--                                \''+${person.name}+'\'-->
+                                <a th:onclick="|javascript:openDialog('${art_item.getId()}')|" style="cursor: pointer;display: flex;justify-content: space-between"><span class="service_content" th:text="${art_item.getArticleName()}">XXXXXXXXXXXXXXXXXXXXXXXXXXX服务</span>
+                                <span class="service_data"th:text="${art_item.getCreateTime()}">2018-11-11</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="hot_list">
+            <div class="hot_list_header">
+                <span class="item">热门服务</span>
+            </div>
+            <div class="hot_list_item">
+                <ul style="list-style: decimal">
+                    <li th:each="item :${articleHotList}">
+                        <a th:onclick="|javascript:openDialog('${item.getId()}')|" style="cursor: pointer"><span class="service_content" th:text="${item.getArticleName()}">XXXXXXXXXXXXXXXXXXXXXXXXXXX服务</span><span style="float: right" class="service_data"th:text="${item.getCreateTime()}">2018-11-11</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="center_bottom">
+        <div class="service_publish">
+            <div class="service_publish_header">
+                <span class="item">服务发布</span>
+            </div>
+            <div class="service_publish_item">
+                <div class="panel-heading">
+                    <div class="header_pic_aside_word"style="line-height: 30px" th:each="item :${pushArticleListList}">
+                        <a th:onclick="|javascript:openDialog('${item.articleId}')|" style="cursor: pointer"><span class="publisher_name" th:text="${item.authorName}">XXXXX</span>在 <span class="word2" th:text="${item.serName}">基本医疗服务</span>上发布了<span class="word2" th:text="${item.articleName}">XXXX服务</span><span style="float: right" th:text="${item.createTime}">3天前</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="show_pic">
+
+        </div>
+        <div class="service_distribution">
+            <div class="service_distribution_header">
+                <span class="item">服务分布</span>
+            </div>
+            <div id="echars" class="service_distribution_item">
+            </div>
+        </div>
+    </div>
+    <div class="panel-heading">
+        <form th:action="@{/post-file}"id="myform" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="userId" id="user_id">
+            <span style="display: flex;margin:auto">
+        文件上传:<span><input type="file" name="file" id="inputid"></span>
+            <div >
+                <button type="submit" style="height: 30px;text-align: center" class="btn btn-success" id="upl" onclick="postFile()">上传</button>
+            </div>
+        </span>
+        </form>
+    </div>
+</div>
+<div id="footer">
+    <p>南京公共服务平台</p>
+</div>
+<div id="light" style="" class="white_content">
+     <h1 id="h1" style="text-align: center"></h1>
+     <h5 id="h5" style="text-align: center"></h5>
+     <h5 id="h6" style="text-align: center"></h5>
+    <div class="panel-heading" style="display: flex;justify-content: center">
+        <textarea style="border-style:none;width: 800px;height: 400px"readonly="readonly" id="articleContent"></textarea>
+    </div>
+    <div class="panel-heading"id="download1"style="display: flex;justify-content: flex-end;float: right">
+        附件: 无
+    </div>
+    <div class="panel-heading" id="download" style="display: flex;justify-content: flex-end;float: right">
+        <input id="href" type="hidden" >
+        附件:<a id="downName" download=""style="cursor: pointer" onclick="download_file()"></a>
+    </div>
+    <!--    uplo_file-->
+    <div class="panel-heading"style="margin-top: 20px">
+    <a href = "javascript:void(0)" onclick = "closeDialog()">点这里关闭本窗口</a>
+    </div>
+</div>
+<div id="fade" class="black_overlay"></div>
+</body>
+<script>
+
+    var nn = document.cookie.split(";")
+    var ele = window.document.getElementById("showCookie")
+    console.log(nn)
+    ele.innerHTML = nn[0].split("=")[1]
+    var id = nn[1].split("=")[1]
+    var nowTime = new Date()
+    var date = nowTime.getDate()
+    var mon = nowTime.getMonth() + 1
+    console.log(mon)
+    var hour = nowTime.getHours()
+    var day = nowTime.getDay()
+    var time = window.document.getElementById("timeShow")
+    var timeNow =  mon+"月 "+ date +"日 "+ hour +"点" +" 星期"+day
+    time.innerHTML = timeNow
+    console.log(id+"aaasd")
+    var uid = window.document.getElementById("user_id");
+    uid.value = id
+    //添加模态框弹出
+    function openDialog(id){
+        $.ajax({
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            url: "/article_hot?id="+id,
+            dataType: 'json',
+            success: function(res) {
+                console.log("up_ok")
+            }
+        })
+
+        console.log(id)
+        $.get("/article_detail?id="+id,"",function (res) {
+            console.log(res)
+            var h1 = document.getElementById("h1");
+            var h5 = document.getElementById("h5");
+            var h6 = document.getElementById("h6");
+            var articleContent = document.getElementById("articleContent");
+            h1.innerText = res.article.articleName
+            h5.innerText = res.article.authorName
+            h6.innerText = res.article.createTime
+            articleContent.innerText = res.article.articleContent
+            if (res.articleFile == null){
+                document.getElementById('download1').style.display='block';
+                document.getElementById('download').style.display='none'
+            }else {
+                document.getElementById('download').style.display='block';
+                document.getElementById('download1').style.display='none'
+                var download = document.getElementById("downName");
+                download.innerText = res.articleFile.fileName
+                var href = document.getElementById("href");
+                href.value = res.articleFile.filePath
+            }
+        })
+        document.getElementById('light').style.display='block';
+        document.getElementById('fade').style.display='block'
+    }
+    //关闭
+    function closeDialog(){
+
+        document.getElementById('light').style.display='none';
+        document.getElementById('fade').style.display='none'
+    }
+    function download_file()
+    {
+       var href = document.getElementById("href").value
+        console.log(href)
+        var aaa = href.split("\\")[2]
+        console.log(aaa)
+        encodeURI(aaa, "utf-8")
+        document.getElementById("downName").href = aaa
+        // window.location.href = aaa
+    }
+
+
+    $.get("/article_echars","",function (res) {
+        var goodsName = [];
+        var goodsReserveNum = [];
+        var servicedata = [];
+        console.log(res)
+        for (let i = 0; i < res.length; i++) {
+            goodsName[i] = res[i].serName;  //将数据从json中分离出来
+            goodsReserveNum[i] = res[i].num;
+            var obj = new Object()
+            obj.name = res[i].serName
+            obj.value = res[i].num
+            servicedata[i] = obj
+        }
+        console.log(goodsName)
+        let myChart = echarts.init(document.getElementById('echars'));
+
+
+        // 指定图表的配置项和数据
+        let option = {
+
+            title : {
+                // text: '某站点用户访问来源',
+                // subtext: '纯属虚构',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'horizontal',
+                left: 'left',
+                top: 180,
+                left:30,
+                data: goodsName
+            },
+            series : [
+                {
+                    name: '服务分布',
+                    type: 'pie',
+                    radius : '50%',
+                    center: ['50%', '40%'],
+                    data:servicedata,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    })
+
+    //文件上传
+    function postFile(){
+        var formData = new FormData();
+
+
+        var inputfile= $('#inputid')[0].files[0];
+        formData.append("inputfile",inputfile);
+    }
+
+
+</script>
+
+
+<script>
+// L2Dwidget.init(document.getElementById("show_pic"),{
+//     "model": {
+//         jsonPath: "https://unpkg.com/live2d-widget-model-shizuku/assets/shizuku.model.json",
+//         "scale": 1
+//     },
+//     "display": {
+//         "position": "right",
+//         "width": 150,
+//         "height": 300,
+//         "hOffset": 0,
+//         "vOffset": -20
+//     },
+//     "mobile": {
+//         "show": true,
+//         "scale": 0.5
+//     },
+//     "react": {
+//         "opacityDefault": 0.9,
+//         "opacityOnHover": 0.2
+//     }
+// });
+</script>
+</html>

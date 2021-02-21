@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>下线</title>
+    <meta charset="UTF-8">
+    <base href="<%=basePath%>">
+    <link rel="stylesheet" type="text/css"
+          href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/head.css">
+    <link rel="SHORTCUT ICON" href="../static/images/icon.png">
+    <link rel="BOOKMARK" href="../static/images/icon.png">
+    <style type="text/css">
+        .main {
+            width: 980px;
+            margin: 0px auto 0px;
+            height: 300px;
+        }
+
+        .tips {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .warn {
+            font-size: 20px;
+            color: red;
+        }
+
+        .link {
+            text-align: center;
+            font-size: 20px;
+        }
+
+        #second {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main">
+    <div>&nbsp;</div>
+    <div class="tips">
+        <span class="warn">您的账号已在他处登录，您被迫下线...</span>
+    </div>
+    <div class="link">
+        <span id="second">3</span>
+        秒后转向登录页面
+    </div>
+</div>
+<script type="text/javascript" src="../static/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var $second = $("#second"),
+            num = 0;
+        var id = setInterval(function () {
+            if ((num = parseInt($second.html())) > 0) {
+                $second.html(--num);
+            } else {
+                clearInterval(id);
+                window.location.href = "../login";
+            }
+        }, 1000);
+    });
+</script>
+</body>
+</html>

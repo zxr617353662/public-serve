@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <link th:href="@{/static/css/login.css}" rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <link th:href="@{/static/images/resizeApi.png}" rel="SHORTCUT ICON" href="../static/images/resizeApi.png">
+    <link th:href="@{/static/images/resizeApi.png}" rel="BOOKMARK" href="../static/images/resizeApi.png">
+    <script th:src="@{/static/script/jquery-1.11.1.min.js}" src="../static/script/jquery-1.11.1.min.js"></script>
+    <script th:src="@{/static/script/base.js}" src="../../static/script/base.js" charset="UTF-8"></script>
+    <script src="../static/script/tips.js" charset="UTF-8"></script>
+
+    <!--    <script th:src="@{/static/script/base.js}" src="../static/script/base.js"></script>-->
+<!--    <script th:src="@{/static/script/login.js}" src="../static/script/login.js"></script>-->
+    <style>
+        * { margin: 0; padding: 0; }
+        html { height: 100%; }
+        body { height: 100%; background: #fff url(images/backgroud.png) 50% 50% no-repeat; background-size: cover;}
+        .dowebok { position: absolute; left: 50%; top: 50%; width: 430px; height: 550px; margin: -300px 0 0 -215px; border: 1px solid #fff; border-radius: 20px; overflow: hidden;}
+        .logo { width: 104px; height: 104px; margin: 50px auto 60px; background: url(images/login.png) 0 0 no-repeat; }
+        .form-item { position: relative; width: 360px; margin: 0 auto; padding-bottom: 30px;}
+        .form-item input { width: 288px; height: 48px; padding-left: 70px; border: 1px solid #fff; border-radius: 25px; font-size: 18px; color: #fff; background-color: transparent; outline: none;}
+        .form-item button { width: 360px; height: 50px; border: 0; border-radius: 25px; font-size: 18px; color: #1f6f4a; outline: none; cursor: pointer; background-color: #fff; }
+        #username { background: url(images/emil.png) 20px 14px no-repeat; }
+        #password { background: url(images/password.png) 23px 11px no-repeat; }
+        .tip { display: none; position: absolute; left: 20px; top: 52px; font-size: 14px; color: #f50; }
+        .reg-bar { width: 360px; margin: 20px auto 0; font-size: 14px; overflow: hidden;}
+        .reg-bar a { color: #fff; text-decoration: none; }
+        .reg-bar a:hover { text-decoration: underline; }
+        .reg-bar .reg { float: left; }
+        .reg-bar .forget { float: right; }
+        .dowebok ::-webkit-input-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+        .dowebok :-moz-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+        .dowebok ::-moz-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+        .dowebok :-ms-input-placeholder { font-size: 18px; line-height: 1.4; color: #fff;}
+
+        @media screen and (max-width: 500px) {
+            * { box-sizing: border-box; }
+            .dowebok { position: static; width: auto; height: auto; margin: 0 30px; border: 0; border-radius: 0; }
+            .logo { margin: 20px auto 20px 60px; }
+            .form-item { width: auto; }
+            .form-item input, .form-item button, .reg-bar { width: 100%; }
+        }
+         .black_overlay{
+             display: none;
+             position: absolute;
+             top: 0%;
+             left: 0%;
+             width: 100%;
+             height: 100%;
+             background-color: black;
+             z-index:1001;
+             -moz-opacity: 0.8;
+             opacity:.80;
+             filter: alpha(opacity=88);
+         }
+        .white_content {
+            display: none;
+            position: absolute;
+            top: 20%;
+            left: 38%;
+            width: 400px;
+            height: 400px;
+            padding: 20px;
+            border: 10px solid orange;
+            background-color: white;
+            z-index:1002;
+            overflow: auto;
+        }
+
+    </style>
+</head>
+<body>
+<!--中间登录-->
+<form th:action="@{/login-into}" action="/login-into" method="post" >
+    <h1 style="text-align: center;padding-top: 50px;font-size: 50px">南京公共服务平台</h1>
+    <div class="dowebok">
+        <div class="logo"></div>
+        <h2 style="text-align:center; height: 50px;font-size: 30px;margin-bottom: 20px" >登录</h2>
+        <div class="form-item">
+            <input id="username" value="admin" type="text" autocomplete="off" placeholder="请输入账户名" name="username">
+<!--            <input type="text" value="admin" placeholder="请输入账户名" name="username"/>-->
+        </div>
+        <div class="form-item">
+            <input id="password" value="password" type="password" autocomplete="off" placeholder="请输入密码" name="password">
+<!--            <input type="password" value="password" placeholder="请输入密码" name="password"/>-->
+        </div>
+        <div style="width: 200px;margin-left:150px;margin-bottom: 10px;">
+            <input id="radio_student" type="radio" name="role"style="margin-left: -15px" value="USER" checked>
+            <label for="radio_student" >用户</label>
+            <input id="radio_manager"style="margin-left: 5px" type="radio" name="role" value="ADMIN">
+            <label for="radio_manager" >管理员</label>
+            <a onclick="reg()" value="注 册"style="margin-left: 10px;text-decoration: underline;cursor:pointer;">注 册</a>
+        </div>
+        <div class="input_box">
+            <div class="form-item">
+                <button type="submit" id="submit">登 录</button>
+            </div>
+            <!--            <span class="error" th:text="${msg }" id="login_error"></span>-->
+        </div>
+    </div>
+</form>
+
+<div id="light" style="" class="white_content">
+    <div class="panel-heading"style="text-align: center;padding-top: 40px;color: black ;font-size: 40px">
+        注&nbsp;&nbsp;册
+    </div>
+    <div class="panel-heading"style="text-align: center;padding-top: 70px">
+        &nbsp;请输入用户名: <span><input id="user_name" class="form-control" type="text" placeholder="请输入账户名" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="text-align: center;padding-top: 30px">
+        &nbsp;&nbsp;请输入密码: <span><input id="password1" class="form-control" placeholder="请输入大于6位数密码"type="password" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading" style="text-align: center;padding-top: 30px">
+        请再次输入密码: <span><input id="password2" class="form-control" type="password"placeholder="请再次输入密码" name="service" style="width: 150px;display: inline-block;align-content: center"></span>
+    </div>
+    <div class="panel-heading"style="text-align: center;padding-top: 40px;color: red ;display: none" id="equPassword">
+        两次密码不一致,请重新输入
+    </div>
+    <div class="panel-heading"style="text-align: center;padding-top: 40px;color: red ;display: none" id="equUsername">
+        用户名已存在,请更换用户名
+    </div>
+    <div class="panel-heading"style="text-align: center;padding-top: 40px;color: red ;display: none" id="passwordLen">
+        密码长度过短,请重新输入密码
+    </div>
+    <div class="panel-heading" style="display: flex;justify-content: center;align-content: center;padding-top: 30px">
+        <button class="form-item" onclick="save_user()" type="submit" style="font-size: 15px;height: 18px;width: 50px;text-align: center;border-radius: 25px">保存</button>
+    </div>
+    <div style="padding-top: 30px">
+        <a href = "javascript:void(0)" onclick = "closeDialog()">点这里关闭本窗口</a>
+    </div>
+</div>
+<div id="fade" class="black_overlay"></div>
+
+</body>
+<script>
+    $(function () {
+        $('#submit').on('click',function () {
+
+        })
+    })
+    function reg() {
+        document.getElementById('light').style.display='block';
+        document.getElementById('fade').style.display='block'
+    }
+
+    function save_user() {
+        var name = document.getElementById("user_name").value
+        var password1 = document.getElementById("password1").value
+        var password2 = document.getElementById("password2").value
+        if(password1.length <6 ){
+            document.getElementById('passwordLen').style.display='block'
+            document.getElementById('equPassword').style.display='none'
+            document.getElementById("equUsername").style.display='none'
+            return
+        }
+        var login ={}
+        login.name = name
+        login.password = password1
+        if (password1 !== password2){
+            document.getElementById('equPassword').style.display='block'
+            document.getElementById("equUsername").style.display='none'
+            document.getElementById('passwordLen').style.display='none'
+
+        }else {
+            $.ajax({
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                url: "/reg?password="+password2,
+                data: JSON.stringify(login),
+                cache:false,
+                dataType: 'json',
+                success: function(res) {
+                    if (res === "添加成功"){
+                        Tips.showMessage("添加成功")
+                        setTimeout(function () {
+                            window.location.reload()
+                            document.getElementById('light').style.display='none';
+                            document.getElementById('fade').style.display='none'
+                            document.getElementById('passwordLen').style.display='none'
+
+                        },2000)
+                    }
+                },
+                error:function (XMLHttpRequest,textStatus,errorThrown) {
+                    document.getElementById("equUsername").style.display='block'
+                    document.getElementById('equPassword').style.display='none'
+                    document.getElementById('passwordLen').style.display='none'
+                }
+            })
+        }
+    }
+    function closeDialog(){
+        window.location.reload()
+        document.getElementById('light').style.display='none';
+        document.getElementById('fade').style.display='none'
+    }
+</script>
+</html>

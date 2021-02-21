@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>服务大全</title>
+    <meta charset="UTF-8">
+    <link rel="SHORTCUT ICON" href="../../static/images/resizeApi.png">
+    <link rel="BOOKMARK" href="../../static/images/resizeApi.png">
+    <link rel="stylesheet" type="text/css"
+          href="../../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/head.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/list_main.css">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap-admin-theme.css">
+</head>
+<body >
+<!--头部-->
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="header">
+    <nav class="navbar navbar-inverse navbar-fixed-top bootstrap-admin-navbar
+    bootstrap-admin-navbar-under-small"
+         role="navigation">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="collapse navbar-collapse main-navbar-collapse">
+                        <a class="navbar-brand" href="#">
+                            <strong>欢迎使用南京公共服务管理平台</strong>
+                            <span style="font-size: 8px" id="cur_time"></span>
+                        </a>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <!--                                    <a type="button" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown">-->
+                                <i class="glyphicon glyphicon-user"></i>
+                            <li>欢迎您，<span id="showCookiea"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</div><div class="container">
+    <div class="row">
+        <div class="col-md-2 bootstrap-admin-col-left"
+             xmlns:th="http://www.thymeleaf.org" th:fragment="left">
+            <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+                <li th:class="${function eq 1?'active' :''}" class="active" >
+                    <a th:href="@{/admin/index}" href="../../admin/index?function=1">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 主页
+                    </a>
+                </li>
+                <li th:class="${function eq 2?'active' :''}" class="active">
+                    <a th:href="@{/service-total} " href="../../service-total?function=2">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 服务大全
+                    </a>
+                </li >
+                <li th:class="${function eq 3?'active' :''}">
+                    <a th:href="@{/service-management}" href="../../service-management?function=3">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 服务管理
+                    </a>
+                </li>
+                <li th:class="${function eq 4?'active' :''}">
+                    <a th:href="@{/notice}" href="../../notice">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 公告管理
+                    </a>
+                </li>
+                <li th:class="${function eq 5?'active' :''}">
+                    <a th:href="@{/user}" href="../../admin/user">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 用户管理
+                    </a>
+                </li>
+                <li th:class="${function eq 6?'active' :''}">
+                    <a th:href="@{/message_list}" href="../../message_list">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 文件管理
+                    </a>
+                </li>
+                <li>
+                    <a href="../../">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 关于我们
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="panel panel-default bootstrap-admin-no-table-panel">
+                    <div class="panel-heading">
+                        请输入用户名:<input type="text" id="name_find" style="width: 150px" placeholder="请输入查询的用户名">
+                        <button class="text-muted bootstrap-admin-box-title" style="font-size: 15px;width: 60px;margin-left: 20px;margin-bottom: 20px" onclick="findName()">查询</button>
+                        <div class="text-muted bootstrap-admin-box-title"style="float: right">
+                                当前用户总数:[[${count}]]
+                            </div>
+                        <div border="0.5px">
+
+                            <table class="table table-bordered" border="1px solid #0094ff" cellspacing="0" cellpadding="0" th:switch="${userList ne null and userList.size() gt 0}" >
+                                <thead >
+                                <tr >
+                                    <th style="text-align: center" width="20%">id</th>
+                                    <th style="text-align: center" width="20%">用户名</th>
+                                    <th style="text-align: center" width="20%">身份</th>
+                                    <th style="text-align: center" width="20%">注册时间</th>
+                                </tr>
+                                </thead>
+                                <thead>
+                                <tbody th:case="true" >
+                                <tr th:each="item : ${userList}">
+                                    <th style="text-align: center" th:text="${item.id}">11</th>
+                                    <th style="text-align: center" th:text="${item.name}">22</th>
+                                    <th style="text-align: center" th:if="${item.role eq 'ADMIN'}">管理员</th>
+                                    <th style="text-align: center"  th:if="${item.role eq 'USER'}">用户</th>
+                                    <th style="text-align: center" th:text="${item.createTime}">33</th>
+                                </tr>
+                                </tbody>
+                                <tbody th:case="false">
+                                <tr>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                    <td>暂无数据</td>
+                                </tr>
+                                </tbody>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+<script type="text/javascript" src="../../static/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"></script>
+<script th:src="@{/static/script/base.js}" src="../../static/script/base.js"></script>
+<script src="../../static/script/admin/grade.js"></script>
+<script src="../../static/script/time.js"></script>
+<script src="../../static/script/tips.js"></script>
+<script type="text/javascript" charset="UTF-8" th:inline="javascript">
+    var nn = document.cookie.split(";")
+    var ele = window.document.getElementById("showCookiea")
+    ele.innerHTML = nn[0].split("=")[1]
+
+    function findName() {
+        var name_find = document.getElementById("name_find");
+        if (name_find){
+            var name= name_find.value
+            var url = "name="+name
+            window.location.href ="../../user?"+encodeURI(encodeURI(url))+""
+        }
+    }
+</script>
+</html>

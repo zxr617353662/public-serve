@@ -1,0 +1,43 @@
+<div class="col-md-2 bootstrap-admin-col-left"
+     xmlns:th="http://www.thymeleaf.org" th:fragment="left">
+    <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+
+<!--        在访问列表页面时,主动设置当前访问的页面-->
+        <li th:class="${function eq 1?'active' :''}" class="active" >
+            <a th:href="@{/admin/index}" href="../../admin/index?function=1">
+                <i class="glyphicon glyphicon-chevron-right"></i> 主页
+            </a>
+        </li>
+
+        <li th:class="${function eq 2?'active' :''}">
+            <a th:href="@{/admin/grade/list}" href="../../admin/grade/list">
+                <i class="glyphicon glyphicon-chevron-right"></i> 年级管理
+            </a>
+        </li >
+        <li th:class="${function eq 3?'active' :''}">
+            <a th:href="@{/admin/major/list}" href="../../admin/major/list">
+                <i class="glyphicon glyphicon-chevron-right"></i> 专业管理
+            </a>
+        </li>
+        <li th:class="${function eq 4?'active' :''}">
+            <a th:href="@{/admin/clazz/list}" href="../../admin/clazz/list">
+                <i class="glyphicon glyphicon-chevron-right"></i> 班级管理
+            </a>
+        </li>
+        <li th:class="${function eq 5?'active' :''}">
+            <a th:href="@{/admin/student/list}" href="../../admin/student/list">
+                <i class="glyphicon glyphicon-chevron-right"></i> 学生管理
+            </a>
+        </li>
+        <li th:class="${function eq 6?'active' :''}">
+            <a th:href="@{/admin/teacher/list}" href="../../admin/teacher/list">
+                <i class="glyphicon glyphicon-chevron-right"></i> 教师管理
+            </a>
+        </li>
+        <li>
+            <a href="../../">
+                <i class="glyphicon glyphicon-chevron-right"></i> 关于我们
+            </a>
+        </li>
+    </ul>
+</div>

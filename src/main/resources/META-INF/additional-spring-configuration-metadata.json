@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "server.redis.password",
+      "type": "java.lang.String",
+      "description": "Description for server.redis.password."
+    },
+    {
+      "name": "spring.redis.pool",
+      "type": "java.lang.String",
+      "description": "Description for spring.redis.pool."
+    }
+  ] }

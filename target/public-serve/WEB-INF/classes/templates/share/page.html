@@ -1,0 +1,48 @@
+<ul class="pull-right pagination"
+    xmlns:th="http://www.thymeleaf.org"
+    th:fragment="page">
+
+    <!--
+        点击事件；上一页、下一页
+        事件的代码是单独的，每个页码有自己的请求逻辑
+    -->
+
+    <li class="disabled">
+        <a th:text="|第 ${pageBean.currentPage} 页/共 ${pageBean.pageCount} 页|">第 1 页/共 10 页</a>
+    </li>
+
+    <!--
+        上一页
+        当前页大于1：不禁用
+        当前页等于1：禁用
+    -->
+    <li
+            th:switch="${pageBean.currentPage > 1}"
+            th:class="${pageBean.currentPage eq 1 ? 'disabled' : ''}">
+        <a th:case="false" href="#" aria-label="Previous">&laquo;</a>
+        <a th:case="true" th:onclick="|page(${pageBean.currentPage - 1})|" href="#" aria-label="Previous">&laquo;</a>
+    </li>
+
+    <!--
+        迭代生成页码
+        如果当前页码等于index 那么设置为激活状态
+    -->
+    <li th:switch="${pageBean.currentPage eq index}"
+        th:class="${pageBean.currentPage eq index ? 'active' : ''}"
+        th:each="index : ${#numbers.sequence(pageBean.pageBeginIndex, pageBean.pageEndIndex)}">
+        <a th:case="true" href="#" th:text="${index}">1</a>
+        <a th:case="false" th:onclick="|page(${index})|" href="#" th:text="${index}">1</a>
+    </li>
+
+    <!--
+       下一页
+       当前页小于总页数：不禁用
+       当前页等于总页数：禁用
+   -->
+    <li
+            th:switch="${pageBean.currentPage < pageBean.pageCount}"
+            th:class="${pageBean.currentPage eq pageBean.pageCount ? 'disabled' : ''}">
+        <a th:case="true" th:onclick="|page(${pageBean.currentPage + 1})|" href="#" aria-label="Next">&raquo;</a>
+        <a th:case="false" href="#" aria-label="Next">&raquo;</a>
+    </li>
+</ul>

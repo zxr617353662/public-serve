@@ -1,0 +1,60 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#center{
+    width: 1000px;
+    /*height: 1000px;*/
+    margin: 0 auto;
+    /*background-color: palegreen;*/
+}
+#center_header{
+    width: 1000px;
+    height: 80px;
+    border-top:1px solid #ccc ;
+    border-bottom:1px solid #ccc ;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    /*background-color: pink;*/
+}
+.prompt{
+    margin-top: 10px ;
+    margin-left: 10px ;
+    font-size: 15px;
+    margin-bottom: 20px;
+    color: #999;
+}
+.title{
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px ;
+    margin-left: 10px ;
+    color: black;
+}
+#center_item{
+    width: 1000px;
+    padding: 0 15px;
+    /*background-color: yellow;*/
+}
+#center_item .center_item_question{
+    /*height: 180px;*/
+    /*background-color: lawngreen;*/
+}
+#center_item .center_item_question .radio-inline{
+    /*background-color: red;*/
+    margin-right: 80px;
+}
+#center_item .center_item_question  .qita_shuru{
+    resize:none;
+    width: 970px;
+    margin-top: 10px;
+    height: 120px;
+    display: none;
+}
+
+#center_item h4{
+    margin-top: 10px;
+}
+#center_item textarea{
+    border-radius: 3px;
+}

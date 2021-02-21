@@ -1,0 +1,27 @@
+<div class="col-md-2 bootstrap-admin-col-left"
+     xmlns:th="http://www.thymeleaf.org" th:fragment="left">
+    <ul class="nav navbar-collapse collapse bootstrap-admin-navbar-side">
+
+                <li th:class="${function eq 1?'active' :''}" class="active" >
+                    <a th:href="@{/student/index}" href="../../user/index">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 主页
+                    </a>
+                </li>
+                <li th:class="${function eq 2?'active' :''}">
+                    <a th:href="@{/student/exam/list}" href="../../user/exam/list">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 参加考试
+                    </a>
+                </li>
+                <li th:class="${function eq 3?'active' :''}">
+                    <a th:href="@{/student/notes}" href="../../user/notes">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 考试记录
+                    </a>
+                </li>
+                <li  th:class="${function eq 4?'active' :''}">
+                    <a href="../../">
+                        <i class="glyphicon glyphicon-chevron-right"></i> 关于我们
+                    </a>
+                </li>
+            </ul>
+        </div>
+
